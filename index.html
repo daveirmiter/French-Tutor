@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Français avec Marie</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Marie">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1c2b4a">
+<meta name="description" content="Your personal French language tutor">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%231c2b4a'/%3E%3Ctext x='90' y='115' font-size='80' text-anchor='middle'%3E%F0%9F%87%AB%F0%9F%87%B7%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Fran%C3%A7ais%20avec%20Marie%22%2C%22short_name%22%3A%22Marie%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%231c2b4a%22%2C%22theme_color%22%3A%22%231c2b4a%22%2C%22orientation%22%3A%22portrait%22%7D">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f0e8; --white: #ffffff; --navy: #1c2b4a;
+    --border: #e0d5c8; --muted: #7a6e64; --light: #faf7f2;
+    --red: #b03030; --green: #2a6a2a; --pill: #e6f0e6;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; background: var(--navy); font-family: var(--sans); }
+  #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 600px; margin: 0 auto; background: var(--white); padding-top: var(--sat); padding-bottom: var(--sab); }
+  header { background: var(--navy); color: var(--bg); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  header h1 { font-family: var(--serif); font-size: 19px; font-weight: bold; }
+  header p  { font-size: 11px; color: #9bb5cc; margin-top: 2px; }
+  header .flag { font-size: 26px; }
+  nav { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--white); }
+  nav button { flex: 1; padding: 10px 2px; border: none; cursor: pointer; font-size: 11px; font-family: var(--sans); background: var(--light); color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s; }
+  nav button.active { background: var(--white); color: var(--navy); font-weight: 600; border-bottom-color: var(--navy); }
+  .panel { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+  .panel.active { display: flex; }
+  .scroll { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+  #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
+  .bubble { padding: 10px 14px; border-radius: 16px; max-width: 84%; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .bubble.user  { align-self: flex-end; background: var(--navy); color: var(--bg); border-radius: 16px 16px 4px 16px; }
+  .bubble.marie { align-self: flex-start; background: var(--light); color: var(--navy); border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+  .bubble.error { align-self: flex-start; background: #fdf0f0; color: var(--red); border: 1px solid #f0c0c0; border-radius: 12px; font-size: 13px; }
+  .typing { color: var(--muted); font-style: italic; font-size: 13px; }
+  #chat-input-row { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); flex-shrink: 0; align-items: flex-end; background: var(--white); }
+  #chat-input { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; font-size: 16px; font-family: var(--sans); outline: none; resize: none; background: var(--light); color: var(--navy); min-height: 42px; max-height: 100px; -webkit-appearance: none; }
+  #send-btn { background: var(--navy); color: var(--white); border: none; border-radius: 10px; padding: 10px 16px; font-size: 14px; cursor: pointer; font-family: var(--sans); font-weight: 500; flex-shrink: 0; }
+  #send-btn:disabled { background: #9aabbc; }
+  .card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border: 1px solid var(--border); margin-bottom: 14px; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat-card { background: var(--white); border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border: 1px solid var(--border); }
+  .big-num { font-family: var(--serif); font-size: 38px; color: var(--navy); line-height: 1; }
+  .card-label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .sec-head { font-family: var(--serif); font-size: 19px; color: var(--navy); margin-bottom: 10px; }
+  .pill { display: inline-block; background: var(--pill); color: var(--green); border-radius: 20px; padding: 4px 11px; font-size: 12px; margin: 3px; }
+  .vocab-table { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .vocab-table th { text-align: left; padding: 9px 11px; background: var(--navy); color: var(--bg); font-size: 12px; font-weight: 600; }
+  .vocab-table td { padding: 8px 11px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .vocab-table tr:nth-child(even) td { background: var(--light); }
+  .vocab-table td:first-child { font-style: italic; color: var(--navy); }
+  .vocab-table td:last-child { color: var(--muted); font-size: 12px; }
+  label.field-label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+  input[type=text], input[type=password], select, textarea.field { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 16px; background: var(--light); color: var(--navy); outline: none; margin-bottom: 14px; font-family: var(--sans); -webkit-appearance: none; appearance: none; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6e64' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .btn-primary { width: 100%; background: var(--navy); color: var(--white); border: none; border-radius: 10px; padding: 13px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--sans); margin-bottom: 10px; }
+  .btn-primary:disabled { background: #9aabbc; }
+  .btn-green { width: 100%; background: var(--green); color: var(--white); border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sans); margin-bottom: 10px; }
+  .btn-danger { width: 100%; background: none; border: 1px solid var(--red); color: var(--red); border-radius: 10px; padding: 11px; font-size: 14px; cursor: pointer; font-family: var(--sans); margin-top: 8px; }
+  .status-msg { margin-top: 10px; font-size: 13px; text-align: center; min-height: 20px; }
+  .status-ok   { color: var(--green); }
+  .status-err  { color: var(--red); }
+  .status-info { color: var(--muted); }
+  .hint-box { font-size: 12px; color: var(--muted); line-height: 1.6; padding: 12px; background: var(--light); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 14px; }
+  .hint-box a { color: var(--navy); }
+  .steps { counter-reset: step; list-style: none; padding: 0; }
+  .steps li { counter-increment: step; display: flex; gap: 12px; margin-bottom: 14px; font-size: 13px; color: var(--navy); line-height: 1.5; }
+  .steps li::before { content: counter(step); background: var(--navy); color: var(--white); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .steps li span { color: var(--muted); }
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 14px; }
+  .empty-state h3 { font-family: var(--serif); font-size: 20px; color: var(--navy); margin-bottom: 6px; }
+  .empty-state p { font-size: 13px; }
+  .overlay { position: fixed; inset: 0; background: rgba(10,15,30,0.65); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+  .modal { background: var(--white); border-radius: 18px; padding: 26px; width: 100%; max-width: 360px; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-family: var(--serif); font-size: 26px; color: var(--navy); margin-bottom: 4px; }
+  .modal .sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+  #install-banner { display: none; background: #e8f0e8; border-bottom: 1px solid #c0d8c0; padding: 10px 16px; font-size: 13px; color: var(--green); flex-shrink: 0; align-items: center; gap: 8px; }
+  #install-banner button { margin-left: auto; background: var(--green); color: white; border: none; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="install-banner">
+    <span>📲</span>
+    <span>Install as an app for reliable storage</span>
+    <button id="install-btn" onclick="triggerInstall()">Install</button>
+  </div>
+  <header>
+    <div>
+      <h1>Français avec Marie 🗼</h1>
+      <p id="header-sub">French Language Tutor</p>
+    </div>
+    <div class="flag">🇫🇷</div>
+  </header>
+  <nav>
+    <button class="active" onclick="switchTab('tutor')">💬 Tutor</button>
+    <button onclick="switchTab('progress')">📊 Progress</button>
+    <button onclick="switchTab('worksheets')">📄 Worksheets</button>
+    <button onclick="switchTab('settings')">⚙️ Settings</button>
+  </nav>
+  <div class="panel active" id="panel-tutor">
+    <div id="chat-messages"></div>
+    <div id="chat-input-row">
+      <textarea id="chat-input" rows="1" placeholder="Type in English or French…"></textarea>
+      <button id="send-btn" onclick="sendMsg()" disabled>Send</button>
+    </div>
+  </div>
+  <div class="panel" id="panel-progress">
+    <div class="scroll" id="progress-content"></div>
+  </div>
+  <div class="panel" id="panel-worksheets">
+    <div class="scroll">
+      <p style="font-family:Georgia,serif;font-size:20px;color:var(--navy);margin-bottom:4px;">Practice Worksheets</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">AI-generated PDFs formatted for your Remarkable 2.</p>
+      <div class="card">
+        <label class="field-label">Type</label>
+        <select id="ws-type" onchange="updateWsHint()">
+          <option value="conjugation">Verb Conjugation Tables</option>
+          <option value="vocabulary">Vocabulary Practice</option>
+          <option value="fillblank">Fill in the Blank</option>
+          <option value="translation">Translation Exercises</option>
+        </select>
+        <label class="field-label">Focus (optional)</label>
+        <input type="text" id="ws-focus" placeholder="e.g. être, avoir — present tense">
+        <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:14px;color:var(--navy);margin-bottom:18px;">
+          <input type="checkbox" id="ws-learned" checked style="width:16px;height:16px;">
+          Include vocabulary I've learned
+        </label>
+        <button class="btn-primary" onclick="generateWorksheet()" id="ws-btn">⬇ Generate &amp; Download PDF</button>
+        <div class="status-msg" id="ws-status"></div>
+      </div>
+      <div class="card" style="background:#f0ece4;">
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">
+          <strong style="color:var(--navy);">📱 Remarkable 2</strong><br>
+          Email the PDF to your <em>@remarkable.com</em> address, or transfer via the Remarkable desktop app.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="panel-settings">
+    <div class="scroll">
+      <div class="card" id="install-card">
+        <p class="sec-head">📲 Install as App</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Installing gives you a home screen icon, fullscreen mode, and persistent storage — your API key won't disappear between sessions.</p>
+        <button class="btn-primary" id="settings-install-btn" onclick="triggerInstall()" style="display:none;">⬇ Install App Now</button>
+        <ol class="steps">
+          <li><span>Host this file at a free HTTPS URL — easiest is <a href="https://tiiny.host" target="_blank"><strong>tiiny.host</strong></a>: drag the file in, get a link in 30 seconds.</span></li>
+          <li><span>Open that link in <strong>Chrome</strong> on your Android phone.</span></li>
+          <li><span>Chrome will show an <strong>"Add to Home screen"</strong> banner — tap it. Or tap <strong>⋮ menu → Add to Home screen</strong>.</span></li>
+          <li><span>Tap <strong>Install</strong>. Marie appears as an app with persistent storage.</span></li>
+        </ol>
+        <div class="hint-box"><strong>For a permanent free link:</strong> Create a <a href="https://github.com" target="_blank">GitHub</a> account → New repository → upload the file → Settings → Pages → enable.</div>
+      </div>
+      <div class="card">
+        <p class="sec-head">API Key</p>
+        <div class="hint-box">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys → Create Key. <strong>Copy it immediately</strong> — Anthropic only shows it once. Stored only on this device.</div>
+        <label class="field-label">Anthropic API Key</label>
+        <input type="password" id="api-key-input" placeholder="sk-ant-…" autocomplete="off">
+        <button class="btn-primary" onclick="saveApiKey()">Save API Key</button>
+        <div class="status-msg" id="api-status"></div>
+      </div>
+      <div class="card">
+        <p class="sec-head">Profile</p>
+        <label class="field-label">Name</label>
+        <input type="text" id="profile-name" placeholder="Your first name">
+        <label class="field-label">French level</label>
+        <select id="profile-level">
+          <option>Beginner (A1)</option>
+          <option>Elementary (A2)</option>
+          <option>Intermediate (B1)</option>
+          <option>Upper-Intermediate (B2)</option>
+          <option>Advanced (C1)</option>
+        </select>
+        <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+        <div class="status-msg" id="profile-status"></div>
+      </div>
+      <div class="card">
+        <p class="sec-head">Export &amp; Import Progress</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Back up your vocabulary and topics, or move them to another device.</p>
+        <button class="btn-green" onclick="exportProgress()">⬇ Export Progress (JSON)</button>
+        <label class="field-label" style="margin-top:4px;">Import progress file</label>
+        <input type="file" id="import-file" accept=".json" onchange="importProgress(event)" style="margin-bottom:14px;font-size:14px;">
+        <div class="status-msg" id="export-status"></div>
+      </div>
+      <div class="card">
+        <p class="sec-head" style="color:var(--red);">Reset</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Clears all progress, vocabulary, and chat history. API key is not affected.</p>
+        <button class="btn-danger" onclick="resetProgress()">Reset All Progress</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="setup-modal" style="display:none;">
+  <div class="modal">
+    <div style="font-size:40px;margin-bottom:10px;">🇫🇷</div>
+    <h2>Bienvenue!</h2>
+    <p class="sub">Set up your profile and add your Anthropic API key to start learning.</p>
+    <label class="field-label">Your first name</label>
+    <input type="text" id="setup-name" placeholder="Votre prénom…" autocomplete="given-name">
+    <label class="field-label">French level</label>
+    <select id="setup-level">
+      <option>Beginner (A1)</option>
+      <option>Elementary (A2)</option>
+      <option>Intermediate (B1)</option>
+      <option>Upper-Intermediate (B2)</option>
+      <option>Advanced (C1)</option>
+    </select>
+    <label class="field-label">Anthropic API Key</label>
+    <input type="password" id="setup-key" placeholder="sk-ant-…" autocomplete="off">
+    <div class="hint-box">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Copy it immediately — it's only shown once.</div>
+    <button class="btn-primary" onclick="doSetup()">Commencer les leçons →</button>
+    <p style="font-size:12px;color:var(--red);margin-top:8px;text-align:center;" id="setup-error"></p>
+  </div>
+</div>
+
+<div class="overlay" id="install-modal" style="display:none;">
+  <div class="modal">
+    <h2 style="margin-bottom:14px;">📲 Install as App</h2>
+    <ol class="steps">
+      <li><span>Open this page in <strong>Chrome</strong> on your Android phone.</span></li>
+      <li><span>Look for the <strong>"Add to Home screen"</strong> banner at the bottom — tap it.</span></li>
+      <li><span>Or tap the <strong>⋮ menu</strong> and select <strong>"Add to Home screen"</strong>.</span></li>
+      <li><span>Tap <strong>Install</strong>. Marie appears as an app with persistent storage.</span></li>
+    </ol>
+    <div class="hint-box">The page must be served over HTTPS — use <a href="https://tiiny.host" target="_blank">tiiny.host</a> or GitHub Pages.</div>
+    <button class="btn-primary" onclick="document.getElementById('install-modal').style.display='none'">Got it</button>
+  </div>
+</div>
+
+<script>
+const SK = { profile:'ft_profile', vocab:'ft_vocab', topics:'ft_topics', history:'ft_history', apikey:'ft_apikey' };
+const MODEL = 'claude-sonnet-4-20250514';
+let state = { profile:{name:'',level:'Beginner (A1)',sessions:0}, vocab:[], topics:[], messages:[], ctx:[], apiKey:'', loading:false };
+
+function lsGet(k) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):null; } catch { return null; } }
+function lsSet(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} }
+function lsDel(k) { try { localStorage.removeItem(k); } catch {} }
+
+let _installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); _installPrompt = e;
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (!isStandalone) {
+    const b=document.getElementById('install-banner'); if(b) b.style.display='flex';
+    const s=document.getElementById('settings-install-btn'); if(s) s.style.display='block';
+  }
+});
+window.addEventListener('appinstalled', () => {
+  _installPrompt=null;
+  const b=document.getElementById('install-banner'); if(b) b.style.display='none';
+  const s=document.getElementById('settings-install-btn'); if(s) s.style.display='none';
+});
+async function triggerInstall() {
+  if (_installPrompt) { _installPrompt.prompt(); const {outcome}=await _installPrompt.userChoice; if(outcome==='accepted') _installPrompt=null; }
+  else { showInstallGuide(); }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const p=lsGet(SK.profile),v=lsGet(SK.vocab),t=lsGet(SK.topics),h=lsGet(SK.history),k=lsGet(SK.apikey);
+  if(p) state.profile=p; if(v) state.vocab=v; if(t) state.topics=t; if(k) state.apiKey=k;
+  if(
