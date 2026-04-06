@@ -28,7 +28,7 @@
   #app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; max-width: 600px; margin: 0 auto; background: var(--white); padding-top: var(--sat); padding-bottom: var(--sab); }
   header { background: var(--navy); color: var(--bg); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   header h1 { font-family: var(--serif); font-size: 19px; font-weight: bold; }
-  header p  { font-size: 11px; color: #9bb5cc; margin-top: 2px; }
+  header p { font-size: 11px; color: #9bb5cc; margin-top: 2px; }
   header .flag { font-size: 26px; }
   nav { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--white); }
   nav button { flex: 1; padding: 10px 2px; border: none; cursor: pointer; font-size: 11px; font-family: var(--sans); background: var(--light); color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s; }
@@ -38,7 +38,7 @@
   .scroll { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
   #chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
   .bubble { padding: 10px 14px; border-radius: 16px; max-width: 84%; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-  .bubble.user  { align-self: flex-end; background: var(--navy); color: var(--bg); border-radius: 16px 16px 4px 16px; }
+  .bubble.user { align-self: flex-end; background: var(--navy); color: var(--bg); border-radius: 16px 16px 4px 16px; }
   .bubble.marie { align-self: flex-start; background: var(--light); color: var(--navy); border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid var(--border); }
   .bubble.error { align-self: flex-start; background: #fdf0f0; color: var(--red); border: 1px solid #f0c0c0; border-radius: 12px; font-size: 13px; }
   .typing { color: var(--muted); font-style: italic; font-size: 13px; }
@@ -67,8 +67,8 @@
   .btn-green { width: 100%; background: var(--green); color: var(--white); border: none; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: var(--sans); margin-bottom: 10px; }
   .btn-danger { width: 100%; background: none; border: 1px solid var(--red); color: var(--red); border-radius: 10px; padding: 11px; font-size: 14px; cursor: pointer; font-family: var(--sans); margin-top: 8px; }
   .status-msg { margin-top: 10px; font-size: 13px; text-align: center; min-height: 20px; }
-  .status-ok   { color: var(--green); }
-  .status-err  { color: var(--red); }
+  .status-ok { color: var(--green); }
+  .status-err { color: var(--red); }
   .status-info { color: var(--muted); }
   .hint-box { font-size: 12px; color: var(--muted); line-height: 1.6; padding: 12px; background: var(--light); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 14px; }
   .hint-box a { color: var(--navy); }
@@ -90,11 +90,13 @@
 </head>
 <body>
 <div id="app">
+
   <div id="install-banner">
     <span>📲</span>
     <span>Install as an app for reliable storage</span>
     <button id="install-btn" onclick="triggerInstall()">Install</button>
   </div>
+
   <header>
     <div>
       <h1>Français avec Marie 🗼</h1>
@@ -102,12 +104,14 @@
     </div>
     <div class="flag">🇫🇷</div>
   </header>
+
   <nav>
     <button class="active" onclick="switchTab('tutor')">💬 Tutor</button>
     <button onclick="switchTab('progress')">📊 Progress</button>
     <button onclick="switchTab('worksheets')">📄 Worksheets</button>
     <button onclick="switchTab('settings')">⚙️ Settings</button>
   </nav>
+
   <div class="panel active" id="panel-tutor">
     <div id="chat-messages"></div>
     <div id="chat-input-row">
@@ -115,9 +119,11 @@
       <button id="send-btn" onclick="sendMsg()" disabled>Send</button>
     </div>
   </div>
+
   <div class="panel" id="panel-progress">
     <div class="scroll" id="progress-content"></div>
   </div>
+
   <div class="panel" id="panel-worksheets">
     <div class="scroll">
       <p style="font-family:Georgia,serif;font-size:20px;color:var(--navy);margin-bottom:4px;">Practice Worksheets</p>
@@ -147,20 +153,22 @@
       </div>
     </div>
   </div>
+
   <div class="panel" id="panel-settings">
     <div class="scroll">
+
       <div class="card" id="install-card">
         <p class="sec-head">📲 Install as App</p>
         <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Installing gives you a home screen icon, fullscreen mode, and persistent storage — your API key won't disappear between sessions.</p>
         <button class="btn-primary" id="settings-install-btn" onclick="triggerInstall()" style="display:none;">⬇ Install App Now</button>
         <ol class="steps">
-          <li><span>Host this file at a free HTTPS URL — easiest is <a href="https://tiiny.host" target="_blank"><strong>tiiny.host</strong></a>: drag the file in, get a link in 30 seconds.</span></li>
-          <li><span>Open that link in <strong>Chrome</strong> on your Android phone.</span></li>
+          <li><span>Open this page in <strong>Chrome</strong> on your Android phone.</span></li>
           <li><span>Chrome will show an <strong>"Add to Home screen"</strong> banner — tap it. Or tap <strong>⋮ menu → Add to Home screen</strong>.</span></li>
           <li><span>Tap <strong>Install</strong>. Marie appears as an app with persistent storage.</span></li>
         </ol>
-        <div class="hint-box"><strong>For a permanent free link:</strong> Create a <a href="https://github.com" target="_blank">GitHub</a> account → New repository → upload the file → Settings → Pages → enable.</div>
+        <div class="hint-box">The page must be served over HTTPS. You are already on GitHub Pages so this is handled.</div>
       </div>
+
       <div class="card">
         <p class="sec-head">API Key</p>
         <div class="hint-box">Get a free key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys → Create Key. <strong>Copy it immediately</strong> — Anthropic only shows it once. Stored only on this device.</div>
@@ -169,6 +177,7 @@
         <button class="btn-primary" onclick="saveApiKey()">Save API Key</button>
         <div class="status-msg" id="api-status"></div>
       </div>
+
       <div class="card">
         <p class="sec-head">Profile</p>
         <label class="field-label">Name</label>
@@ -184,6 +193,7 @@
         <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
         <div class="status-msg" id="profile-status"></div>
       </div>
+
       <div class="card">
         <p class="sec-head">Export &amp; Import Progress</p>
         <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Back up your vocabulary and topics, or move them to another device.</p>
@@ -192,11 +202,13 @@
         <input type="file" id="import-file" accept=".json" onchange="importProgress(event)" style="margin-bottom:14px;font-size:14px;">
         <div class="status-msg" id="export-status"></div>
       </div>
+
       <div class="card">
         <p class="sec-head" style="color:var(--red);">Reset</p>
         <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Clears all progress, vocabulary, and chat history. API key is not affected.</p>
         <button class="btn-danger" onclick="resetProgress()">Reset All Progress</button>
       </div>
+
     </div>
   </div>
 </div>
@@ -233,7 +245,6 @@
       <li><span>Or tap the <strong>⋮ menu</strong> and select <strong>"Add to Home screen"</strong>.</span></li>
       <li><span>Tap <strong>Install</strong>. Marie appears as an app with persistent storage.</span></li>
     </ol>
-    <div class="hint-box">The page must be served over HTTPS — use <a href="https://tiiny.host" target="_blank">tiiny.host</a> or GitHub Pages.</div>
     <button class="btn-primary" onclick="document.getElementById('install-modal').style.display='none'">Got it</button>
   </div>
 </div>
@@ -241,32 +252,387 @@
 <script>
 const SK = { profile:'ft_profile', vocab:'ft_vocab', topics:'ft_topics', history:'ft_history', apikey:'ft_apikey' };
 const MODEL = 'claude-sonnet-4-20250514';
-let state = { profile:{name:'',level:'Beginner (A1)',sessions:0}, vocab:[], topics:[], messages:[], ctx:[], apiKey:'', loading:false };
+let state = {
+  profile: { name:'', level:'Beginner (A1)', sessions:0 },
+  vocab: [], topics: [], messages: [], ctx: [],
+  apiKey: '', loading: false,
+};
 
 function lsGet(k) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):null; } catch { return null; } }
 function lsSet(k,v) { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} }
 function lsDel(k) { try { localStorage.removeItem(k); } catch {} }
 
+if ('serviceWorker' in navigator) {
+  const swCode = [
+    "self.addEventListener('install', e => self.skipWaiting());",
+    "self.addEventListener('activate', e => self.clients.claim());",
+    "self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));",
+  ].join('\n');
+  const swBlob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+
 let _installPrompt = null;
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); _installPrompt = e;
+  e.preventDefault();
+  _installPrompt = e;
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
   if (!isStandalone) {
-    const b=document.getElementById('install-banner'); if(b) b.style.display='flex';
-    const s=document.getElementById('settings-install-btn'); if(s) s.style.display='block';
+    const b = document.getElementById('install-banner'); if (b) b.style.display = 'flex';
+    const s = document.getElementById('settings-install-btn'); if (s) s.style.display = 'block';
   }
 });
 window.addEventListener('appinstalled', () => {
-  _installPrompt=null;
-  const b=document.getElementById('install-banner'); if(b) b.style.display='none';
-  const s=document.getElementById('settings-install-btn'); if(s) s.style.display='none';
+  _installPrompt = null;
+  const b = document.getElementById('install-banner'); if (b) b.style.display = 'none';
+  const s = document.getElementById('settings-install-btn'); if (s) s.style.display = 'none';
 });
 async function triggerInstall() {
-  if (_installPrompt) { _installPrompt.prompt(); const {outcome}=await _installPrompt.userChoice; if(outcome==='accepted') _installPrompt=null; }
-  else { showInstallGuide(); }
+  if (_installPrompt) {
+    _installPrompt.prompt();
+    const { outcome } = await _installPrompt.userChoice;
+    if (outcome === 'accepted') _installPrompt = null;
+  } else {
+    showInstallGuide();
+  }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const p=lsGet(SK.profile),v=lsGet(SK.vocab),t=lsGet(SK.topics),h=lsGet(SK.history),k=lsGet(SK.apikey);
-  if(p) state.profile=p; if(v) state.vocab=v; if(t) state.topics=t; if(k) state.apiKey=k;
-  if(
+  const p=lsGet(SK.profile), v=lsGet(SK.vocab), t=lsGet(SK.topics),
+        h=lsGet(SK.history), k=lsGet(SK.apikey);
+  if (p) state.profile=p;
+  if (v) state.vocab=v;
+  if (t) state.topics=t;
+  if (k) state.apiKey=k;
+  if (h) { state.messages=h.display||[]; state.ctx=h.ctx||[]; }
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (isStandalone) {
+    const ic = document.getElementById('install-card'); if (ic) ic.style.display = 'none';
+    const bn = document.getElementById('install-banner'); if (bn) bn.style.display = 'none';
+  }
+  if (!p || !k) {
+    if (p) { document.getElementById('setup-name').value=p.name; document.getElementById('setup-level').value=p.level; }
+    document.getElementById('setup-modal').style.display = 'flex';
+  } else {
+    renderAll();
+  }
+  const inp = document.getElementById('chat-input');
+  inp.addEventListener('input', () => { inp.style.height='auto'; inp.style.height=Math.min(inp.scrollHeight,100)+'px'; });
+  inp.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
+  renderChat();
+});
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function showInstallGuide() { document.getElementById('install-modal').style.display='flex'; }
+
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  ['tutor','progress','worksheets','settings'].forEach((t,i)=>{
+    if(t===name) document.querySelectorAll('nav button')[i].classList.add('active');
+  });
+  if(name==='progress') renderProgress();
+  if(name==='settings') renderSettings();
+}
+
+function renderAll() {
+  const p=state.profile;
+  document.getElementById('header-sub').textContent = p.name ? `Bonjour, ${p.name} · ${p.level}` : 'French Language Tutor';
+  document.getElementById('send-btn').disabled = false;
+  renderChat();
+}
+
+function renderChat() {
+  const el=document.getElementById('chat-messages');
+  el.innerHTML='';
+  if (!state.messages.length) {
+    el.innerHTML=`<div class="empty-state"><div class="icon">🗼</div><h3>Your French lesson awaits</h3><p>Say "Bonjour!" to start</p></div>`;
+    return;
+  }
+  state.messages.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='bubble '+(m.role==='user'?'user':m.role==='error'?'error':'marie');
+    d.textContent=m.content;
+    el.appendChild(d);
+  });
+  el.scrollTop=el.scrollHeight;
+}
+
+function addBubble(role,content) {
+  state.messages.push({role,content});
+  const el=document.getElementById('chat-messages');
+  el.querySelector('.empty-state')?.remove();
+  const d=document.createElement('div');
+  d.className='bubble '+(role==='user'?'user':role==='error'?'error':'marie');
+  d.textContent=content;
+  el.appendChild(d);
+  el.scrollTop=el.scrollHeight;
+}
+
+function renderProgress() {
+  const {profile,vocab,topics}=state;
+  let html=`<div class="card-grid">
+    <div class="stat-card"><div class="big-num">${profile.sessions}</div><div class="card-label">Sessions</div></div>
+    <div class="stat-card"><div class="big-num">${vocab.length}</div><div class="card-label">Words</div></div>
+    <div class="stat-card" style="grid-column:1/-1;">
+      <div class="card-label">Level</div>
+      <div style="font-family:Georgia,serif;font-size:18px;color:var(--navy);margin-top:4px;">${esc(profile.level)}</div>
+    </div>
+  </div>`;
+  if(topics.length) html+=`<p class="sec-head">Grammar Topics</p><div style="margin-bottom:20px;">${topics.map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div>`;
+  if(vocab.length) {
+    html+=`<p class="sec-head">Vocabulary Bank — ${vocab.length} words</p>
+    <table class="vocab-table"><thead><tr><th>French</th><th>English</th><th>Category</th></tr></thead><tbody>`;
+    [...vocab].reverse().forEach(v=>{ html+=`<tr><td>${esc(v.word)}</td><td>${esc(v.translation)}</td><td>${esc(v.category)}</td></tr>`; });
+    html+=`</tbody></table>`;
+  }
+  if(!vocab.length&&!topics.length) html+=`<div class="empty-state"><div class="icon">📚</div><p>Chat with Marie to start tracking progress!</p></div>`;
+  document.getElementById('progress-content').innerHTML=html;
+}
+
+function renderSettings() {
+  const k=state.apiKey;
+  document.getElementById('api-key-input').value = k ? k.slice(0,14)+'…' : '';
+  document.getElementById('profile-name').value = state.profile.name||'';
+  document.getElementById('profile-level').value = state.profile.level||'Beginner (A1)';
+}
+
+function doSetup() {
+  const name=document.getElementById('setup-name').value.trim();
+  const level=document.getElementById('setup-level').value;
+  const key=document.getElementById('setup-key').value.trim();
+  const err=document.getElementById('setup-error');
+  if (!name) { err.textContent='Please enter your name.'; return; }
+  if (!key||!key.startsWith('sk-')) { err.textContent='Please enter a valid API key (starts with sk-).'; return; }
+  err.textContent='';
+  state.profile={ name, level, sessions:0, startDate:new Date().toISOString() };
+  state.apiKey=key;
+  lsSet(SK.profile, state.profile);
+  lsSet(SK.apikey, key);
+  document.getElementById('setup-modal').style.display='none';
+  renderAll();
+  const welcome=`Bonjour ${name}! 🇫🇷 Je m'appelle Marie — I'm your French tutor.\n\nSince you're at the ${level} level, I'll tailor every lesson to where you are right now. We'll build your vocabulary, grammar, and confidence one step at a time.\n\nTo get started, just say "Commençons!" (Let's begin!) or ask me anything — a word, a phrase, a grammar question. What would you like to learn today?`;
+  addBubble('marie', welcome);
+  state.ctx=[{role:'assistant',content:welcome}];
+  saveHistory();
+}
+
+function buildSysPrompt() {
+  const {profile,vocab,topics}=state;
+  const rv=vocab.slice(-25).map(v=>`${v.word} (${v.translation})`).join(', ');
+  return `You are Marie, a warm, encouraging, expert French language tutor. Your student is ${profile.name} at the ${profile.level} level.
+
+STUDENT PROFILE:
+- Level: ${profile.level}
+- Sessions: ${profile.sessions}
+- Vocabulary (recent): ${rv||'None yet — first session!'}
+- Grammar topics covered: ${topics.join(', ')||'None yet'}
+
+TEACHING STYLE:
+- Adapt difficulty to their level; teach one concept at a time
+- Correct errors gently with explanation
+- Use French with English explanations; immersion on request
+- Warm, encouraging, progress feels achievable
+
+PROGRESS TRACKING — add these tags at the END of every response:
+[VOCAB: french_word | english_translation | category]
+[TOPIC: topic_name]
+These are hidden from the student and auto-saved. Always include when introducing new material.`;
+}
+
+function parseTags(text) {
+  const nv=[],nt=[];
+  const vR=/\[VOCAB:\s*([^|\]]+)\s*\|\s*([^|\]]+)\s*\|\s*([^\]]+)\]/g;
+  const tR=/\[TOPIC:\s*([^\]]+)\]/g;
+  let m;
+  while((m=vR.exec(text))!==null) nv.push({word:m[1].trim(),translation:m[2].trim(),category:m[3].trim(),date:new Date().toISOString()});
+  while((m=tR.exec(text))!==null) nt.push(m[1].trim());
+  const clean=text.replace(/\[VOCAB:[^\]]+\]/g,'').replace(/\[TOPIC:[^\]]+\]/g,'').replace(/\n{3,}/g,'\n\n').trim();
+  return {clean,nv,nt};
+}
+
+async function sendMsg() {
+  const inp=document.getElementById('chat-input');
+  const text=inp.value.trim();
+  if (!text||state.loading) return;
+  if (!state.apiKey) { switchTab('settings'); return; }
+  inp.value=''; inp.style.height='auto';
+  state.loading=true;
+  document.getElementById('send-btn').disabled=true;
+  addBubble('user',text);
+  state.ctx.push({role:'user',content:text});
+  const chatEl=document.getElementById('chat-messages');
+  const typing=document.createElement('div');
+  typing.className='bubble marie typing';
+  typing.textContent="Marie est en train d'écrire…";
+  chatEl.appendChild(typing);
+  chatEl.scrollTop=chatEl.scrollHeight;
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':state.apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+      },
+      body:JSON.stringify({
+        model:MODEL, max_tokens:1000,
+        system:buildSysPrompt(),
+        messages:state.ctx.slice(-14),
+      }),
+    });
+    const data=await res.json();
+    if(data.error) throw new Error(`${data.error.type}: ${data.error.message}`);
+    const raw=data.content?.find(b=>b.type==='text')?.text||'Désolée, I could not respond. Please try again.';
+    const {clean,nv,nt}=parseTags(raw);
+    if(nv.length){ nv.forEach(v=>{ if(!state.vocab.find(e=>e.word.toLowerCase()===v.word.toLowerCase())) state.vocab.push(v); }); lsSet(SK.vocab,state.vocab); }
+    if(nt.length){ nt.forEach(t=>{ if(!state.topics.includes(t)) state.topics.push(t); }); lsSet(SK.topics,state.topics); }
+    state.ctx.push({role:'assistant',content:raw});
+    typing.remove();
+    addBubble('marie',clean);
+    if(state.ctx.length===2){ state.profile.sessions++; state.profile.lastSession=new Date().toISOString(); lsSet(SK.profile,state.profile); }
+    saveHistory();
+  } catch(err) {
+    typing.remove();
+    addBubble('error','⚠️ '+(err.message||'Connection error. Check your API key in Settings.'));
+    state.ctx.pop();
+  } finally {
+    state.loading=false;
+    document.getElementById('send-btn').disabled=false;
+    inp.focus();
+  }
+}
+
+function saveHistory() { lsSet(SK.history,{display:state.messages.slice(-60),ctx:state.ctx.slice(-20)}); }
+
+function saveApiKey() {
+  const k=document.getElementById('api-key-input').value.trim();
+  const el=document.getElementById('api-status');
+  if(!k||(!k.startsWith('sk-')&&!k.includes('…'))){ el.className='status-msg status-err'; el.textContent='Key should start with sk-'; return; }
+  if(!k.includes('…')){ state.apiKey=k; lsSet(SK.apikey,k); }
+  el.className='status-msg status-ok'; el.textContent='✓ Saved';
+  setTimeout(()=>el.textContent='',3000);
+}
+
+function saveProfile() {
+  const name=document.getElementById('profile-name').value.trim();
+  const level=document.getElementById('profile-level').value;
+  const el=document.getElementById('profile-status');
+  if(!name){ el.className='status-msg status-err'; el.textContent='Name required'; return; }
+  state.profile={...state.profile,name,level};
+  lsSet(SK.profile,state.profile);
+  document.getElementById('header-sub').textContent=`Bonjour, ${name} · ${level}`;
+  el.className='status-msg status-ok'; el.textContent='✓ Saved';
+  setTimeout(()=>el.textContent='',3000);
+}
+
+function exportProgress() {
+  const data={exportDate:new Date().toISOString(),version:'1.0',profile:{...state.profile},vocab:state.vocab,topics:state.topics};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`marie-progress-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  const el=document.getElementById('export-status');
+  el.className='status-msg status-ok'; el.textContent='✓ Exported!';
+  setTimeout(()=>el.textContent='',4000);
+}
+
+function importProgress(event) {
+  const file=event.target.files[0]; if(!file) return;
+  const el=document.getElementById('export-status');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const data=JSON.parse(e.target.result);
+      if(!data.version||!data.profile) throw new Error('Invalid file format');
+      if(!confirm(`Import progress for ${data.profile.name}?\n${data.vocab?.length||0} vocab words, ${data.topics?.length||0} topics.\n\nWill MERGE with current data.`)) return;
+      (data.vocab||[]).forEach(nv=>{ if(!state.vocab.find(ev=>ev.word.toLowerCase()===nv.word.toLowerCase())) state.vocab.push(nv); });
+      (data.topics||[]).forEach(nt=>{ if(!state.topics.includes(nt)) state.topics.push(nt); });
+      state.profile.name=data.profile.name||state.profile.name;
+      state.profile.level=data.profile.level||state.profile.level;
+      state.profile.sessions=Math.max(state.profile.sessions,data.profile.sessions||0);
+      lsSet(SK.vocab,state.vocab); lsSet(SK.topics,state.topics); lsSet(SK.profile,state.profile);
+      renderSettings();
+      el.className='status-msg status-ok'; el.textContent=`✓ Imported: ${data.vocab?.length||0} words`;
+    } catch(err) { el.className='status-msg status-err'; el.textContent='⚠️ '+err.message; }
+  };
+  reader.readAsText(file);
+}
+
+function resetProgress() {
+  if(!confirm('Reset all progress?\n\nVocabulary, topics, and chat history cleared.\nAPI key is NOT affected.')) return;
+  [SK.profile,SK.vocab,SK.topics,SK.history].forEach(lsDel);
+  state.vocab=[]; state.topics=[]; state.messages=[]; state.ctx=[];
+  state.profile={name:'',level:'Beginner (A1)',sessions:0};
+  renderAll();
+  document.getElementById('setup-modal').style.display='flex';
+}
+
+const WS_HINTS={conjugation:'e.g. être, avoir, aller — present tense',vocabulary:'e.g. food and dining, colours',fillblank:'e.g. articles, adjective agreement',translation:'e.g. everyday phrases, greetings'};
+function updateWsHint(){ document.getElementById('ws-focus').placeholder=WS_HINTS[document.getElementById('ws-type').value]||''; }
+
+async function generateWorksheet() {
+  if(!state.apiKey){ switchTab('settings'); return; }
+  const type=document.getElementById('ws-type').value;
+  const focus=document.getElementById('ws-focus').value.trim();
+  const useLearned=document.getElementById('ws-learned').checked;
+  const btn=document.getElementById('ws-btn');
+  const statusEl=document.getElementById('ws-status');
+  btn.disabled=true; btn.textContent='Generating…';
+  statusEl.className='status-msg status-info'; statusEl.textContent='Asking AI for worksheet content…';
+  const vocabList=state.vocab.map(v=>`${v.word}=${v.translation}`).join(', ')||'basic vocabulary';
+  const topicList=state.topics.join(', ')||'basic greetings';
+  const prompt=`Generate a French "${type}" worksheet${focus?` on "${focus}"`:''}for a ${state.profile.level} student.\nVocabulary: ${useLearned?vocabList:'standard curriculum'}. Topics: ${topicList}.\nReturn ONLY raw JSON (no backticks):\n{"title":"...","subtitle":"Name: _________________________   Date: _______________","instructions":"...","sections":[{"heading":"...","items":[{"prompt":"...","lines":1}]}]}\nRules: Conjugation=2-3 verbs,pronouns as prompts,lines:1. Vocab=16-20 items,lines:1. Fill-blank=12-15 sentences,lines:1. Translation=10-12,lines:2. Format for e-ink tablet.`;
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':state.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:MODEL,max_tokens:2500,system:'Return ONLY valid raw JSON, no markdown.',messages:[{role:'user',content:prompt}]}),
+    });
+    const data=await res.json();
+    if(data.error) throw new Error(data.error.message);
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    let ws; try{ ws=JSON.parse(raw.replace(/```json|```/g,'').trim()); }catch{ throw new Error('Invalid worksheet data — please try again.'); }
+    statusEl.textContent='Building PDF…';
+    const fname=buildPDF(ws,type);
+    statusEl.className='status-msg status-ok'; statusEl.textContent='✓ Downloaded: '+fname;
+  } catch(err){ statusEl.className='status-msg status-err'; statusEl.textContent='⚠️ '+err.message; }
+  finally{ btn.disabled=false; btn.textContent='⬇ Generate & Download PDF'; }
+}
+
+function buildPDF(ws,type) {
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'letter'});
+  const W=215.9,H=279.4,mg=22,cW=W-mg*2; let y=mg;
+  function np(n=12){ if(y+n>H-mg){doc.addPage();y=mg;} }
+  doc.setFont('helvetica','bold'); doc.setFontSize(18);
+  doc.text(ws.title||'French Practice Worksheet',W/2,y,{align:'center'}); y+=9;
+  doc.setFont('helvetica','normal'); doc.setFontSize(11);
+  doc.text(ws.subtitle||'Name: _________________________   Date: _______________',W/2,y,{align:'center'}); y+=7;
+  doc.setDrawColor(80,80,80); doc.setLineWidth(0.6); doc.line(mg,y,W-mg,y); y+=8;
+  if(ws.instructions){ doc.setFont('helvetica','italic'); doc.setFontSize(10); const ls=doc.splitTextToSize(ws.instructions,cW); doc.text(ls,mg,y); y+=ls.length*5+7; }
+  (ws.sections||[]).forEach((sec,si)=>{
+    np(18); doc.setFont('helvetica','bold'); doc.setFontSize(13);
+    doc.text(`${si+1}. ${sec.heading}`,mg,y); y+=9;
+    (sec.items||[]).forEach((item,ii)=>{
+      const lc=item.lines||1; np(8+lc*10+4);
+      doc.setFont('helvetica','normal'); doc.setFontSize(11);
+      const pt=doc.splitTextToSize(`${ii+1}.  ${item.prompt}`,cW-6);
+      doc.text(pt,mg+2,y); y+=pt.length*6+3;
+      for(let l=0;l<lc;l++){ doc.setDrawColor(190,190,190); doc.setLineWidth(0.3); doc.line(mg+8,y,W-mg,y); y+=10; }
+      y+=2;
+    }); y+=6;
+  });
+  const tp=doc.internal.getNumberOfPages();
+  doc.setFont('helvetica','italic'); doc.setFontSize(9); doc.setTextColor(160,160,160);
+  for(let p=1;p<=tp;p++){ doc.setPage(p); doc.text(`Français avec Marie  •  ${state.profile.name}  •  ${state.profile.level}  •  Page ${p} of ${tp}`,W/2,H-10,{align:'center'}); }
+  const fname=`french_${type}_${new Date().toISOString().slice(0,10)}.pdf`;
+  doc.save(fname); return fname;
+}
+</script>
+</body>
+</html>
